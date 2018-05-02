@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
+import PhraseReader from './PhraseReader';
 import './App.css';
 
 class App extends Component {
@@ -27,16 +28,7 @@ class App extends Component {
       currentPhrase: null
     };
 
-    this.speechSynthesisUtterance = null;
-
-    var voices = window.speechSynthesis.getVoices();
-    this.speechSynthesisUtterance = new SpeechSynthesisUtterance();
-    this.speechSynthesisUtterance.voiceURI = 'native';
-    this.speechSynthesisUtterance.volume = 1;
-    this.speechSynthesisUtterance.rate = 1.1;
-    this.speechSynthesisUtterance.pitch = 1;
-
-    this.speechSynthesisUtterance.lang = 'en-US';
+    this.phraseReader = new PhraseReader(this.state.allPhrases);
 
   }
 
@@ -62,20 +54,14 @@ class App extends Component {
   }
 
   readCurrentPhaseSlowly(){
-    this.speechSynthesisUtterance.rate = 0.6;
-    this.readCurrentPhase();
+    this.phraseReader.decreaseSpeechVelocity();
+    this.phraseReader.readPhrase(this.state.currentPhrase);
   }
 
   readCurrentPhase(){
-    this.speechSynthesisUtterance.rate = 1.1;
-    this.readPhrase(this.state.currentPhrase);
+    this.phraseReader.normalSpeechVelocity();
+    this.phraseReader.readPhrase(this.state.currentPhrase);
   }
-
-  readPhrase(phrase) {
-    this.speechSynthesisUtterance.text = phrase;
-    window.speechSynthesis.speak(this.speechSynthesisUtterance);
-  }
-
 
   render() {
     return (
@@ -84,12 +70,12 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to React</h1>
         </header>
-        <p className="App-intro">
+        <div className="App-intro">
           <p>{this.state.currentPhrase}</p>
           <button onClick={() => this.readCurrentPhase()}>Read</button>
           <button onClick={() => this.readCurrentPhaseSlowly()}>Read slowly</button>
           <button onClick={() => this.nextPhase()}>Next</button>
-        </p>
+        </div>
       </div>
     );
   }
