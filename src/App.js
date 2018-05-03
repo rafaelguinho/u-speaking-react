@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import PhraseReader from './PhraseReader';
+import Similarity from './Similarity';
+import Listener from './Listener';
 import './App.css';
 
 class App extends Component {
@@ -25,14 +27,15 @@ class App extends Component {
         "Do you know where this hotel is?",
         "Didn't even last a minute"
       ],
-      currentPhrase: null
+      currentPhrase: null,
+      saidSentenceCorrectly: false
     };
 
     this.phraseReader = new PhraseReader(this.state.allPhrases);
 
   }
 
-  componentWillMount(){
+  componentWillMount() {
     this.setState({ currentPhrase: this.selectRandonPhrase() });
   }
 
@@ -40,7 +43,8 @@ class App extends Component {
     this.readCurrentPhase();
   }
 
-  componentDidUpdate(){
+  componentDidUpdate() {
+    this.setState({ saidSentenceCorrectly: false });
     this.readCurrentPhase();
   }
 
@@ -53,14 +57,83 @@ class App extends Component {
     this.setState({ currentPhrase: this.selectRandonPhrase() });
   }
 
-  readCurrentPhaseSlowly(){
+  readCurrentPhaseSlowly() {
     this.phraseReader.decreaseSpeechVelocity();
     this.phraseReader.readPhrase(this.state.currentPhrase);
   }
 
-  readCurrentPhase(){
+  readCurrentPhase() {
     this.phraseReader.normalSpeechVelocity();
     this.phraseReader.readPhrase(this.state.currentPhrase);
+  }
+
+  isSimilar(similarity) {
+    if (similarity >= 0.9)
+      return true;
+
+    return false;
+  }
+
+  praticeCurrentPhase() {
+    var recognition = Listener.listen();
+
+    recognition.start();
+
+
+    recognition.onstart = function () {
+      console.log('Listening...');
+    };
+
+    var two_line = /\n\n/g;
+    var one_line = /\n/g;
+    function linebreak(s) {
+      return s.replace(two_line, '<p></p>').replace(one_line, '<br>');
+    }
+
+
+    recognition.onresult = function (event) {
+
+
+      var isFinalResult = event.results[0].isFinal;
+
+      let interimResult = '';
+      let appUnderstood = '';
+
+      if (!isFinalResult) {
+
+        for (var i = event.resultIndex; i < event.results.length; ++i) {
+          interimResult += event.results[i][0].transcript;
+        }
+
+        return;
+      }
+
+
+      appUnderstood = event.results[0][0].transcript;
+      interimResult = '';
+
+
+      var similarity = Similarity.getSimilarity(appUnderstood, this.state.currentPhrase);
+
+      if (this.isSimilar(similarity)) {
+        recognition.stop();
+        /*$scope.success = true;
+        $scope.determinateValue += 1;*/
+
+        //if ($scope.determinateValue >= 100) $scope.showSimpleToast('You did!');
+      }
+      else
+        //$scope.fail = true;
+
+        recognition.stop();
+
+      //$scope.$apply();
+    }
+
+    recognition.onerror = function (error) {
+      //$scope.listening = false;
+      //$scope.error = true;
+    };
   }
 
   render() {
@@ -71,10 +144,12 @@ class App extends Component {
           <h1 className="App-title">Welcome to React</h1>
         </header>
         <div className="App-intro">
-          <p>{this.state.currentPhrase}</p>
           <button onClick={() => this.readCurrentPhase()}>Read</button>
           <button onClick={() => this.readCurrentPhaseSlowly()}>Read slowly</button>
-          <button onClick={() => this.nextPhase()}>Next</button>
+
+          <p>{this.state.currentPhrase}</p>
+          <button onClick={() => this.praticeCurrentPhase()}>Pratice</button>
+          <button onClick={() => this.nextPhase()} disabled={!this.state.saidSentenceCorrectly}>Next</button>
         </div>
       </div>
     );
