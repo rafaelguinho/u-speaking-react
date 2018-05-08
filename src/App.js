@@ -139,17 +139,32 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <header className="App-header">
+        {/* <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <div className="App-intro">
-          <button onClick={() => this.readCurrentPhase()}>Read</button>
-          <button onClick={() => this.readCurrentPhaseSlowly()}>Read slowly</button>
+        </header> */}
+        <div className="card">
+          <div className="card-container">
 
-          <p>{this.state.currentPhrase}</p>
-          <button onClick={() => this.praticeCurrentPhase()}>Pratice</button>
-          <button onClick={() => this.nextPhase()} disabled={!this.state.saidSentenceCorrectly}>Next</button>
+            <div className="card-top">
+              <button onClick={() => this.readCurrentPhase()}>Read</button>
+              <button onClick={() => this.readCurrentPhaseSlowly()}>Read slowly</button>
+            </div>
+
+            <div className="card-content">
+              <p>{this.state.currentPhrase}</p>
+            </div>
+
+            <div className="card-botton">
+              <button onClick={() => this.praticeCurrentPhase()}>Pratice</button>
+              <button onClick={() => this.nextPhase()} disabled={!this.state.saidSentenceCorrectly}>Next</button>
+            </div>
+
+
+
+
+
+          </div>
         </div>
       </div>
     );
