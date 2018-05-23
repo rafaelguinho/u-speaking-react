@@ -28,7 +28,10 @@ class App extends Component {
         "Didn't even last a minute"
       ],
       currentPhrase: null,
-      saidSentenceCorrectly: false
+      saidSentenceCorrectly: false,
+      saidByTheUser: null,
+      praticing: false,
+      saidByTheUserStyle: { color: 'rgb(137, 151, 156)' }
     };
 
     this.phraseReader = new PhraseReader(this.state.allPhrases);
@@ -44,7 +47,9 @@ class App extends Component {
   }
 
   componentDidUpdate() {
-    this.setState({ saidSentenceCorrectly: false });
+
+    if (this.state.praticing) return;
+
     this.readCurrentPhase();
   }
 
@@ -54,7 +59,7 @@ class App extends Component {
   }
 
   nextPhase() {
-    this.setState({ currentPhrase: this.selectRandonPhrase() });
+    this.setState({ currentPhrase: this.selectRandonPhrase(), saidByTheUser: '', saidSentenceCorrectly: false, praticing: false, saidByTheUserStyle: { color: 'rgb(137, 151, 156)' } });
   }
 
   readCurrentPhaseSlowly() {
@@ -67,14 +72,10 @@ class App extends Component {
     this.phraseReader.readPhrase(this.state.currentPhrase);
   }
 
-  isSimilar(similarity) {
-    if (similarity >= 0.9)
-      return true;
-
-    return false;
-  }
-
   praticeCurrentPhase() {
+    let that = this;
+    that.setState({ saidByTheUser: '', praticing: true, saidByTheUserStyle: { color: 'rgb(137, 151, 156)' } });
+
     var recognition = Listener.listen();
 
     recognition.start();
@@ -105,6 +106,8 @@ class App extends Component {
           interimResult += event.results[i][0].transcript;
         }
 
+        that.setState({ saidByTheUser: interimResult });
+
         return;
       }
 
@@ -113,21 +116,17 @@ class App extends Component {
       interimResult = '';
 
 
-      var similarity = Similarity.getSimilarity(appUnderstood, this.state.currentPhrase);
+      var similarity = Similarity.getSimilarity(appUnderstood, that.state.currentPhrase);
 
-      if (this.isSimilar(similarity)) {
+      if (similarity >= 0.9) {
+        that.setState({ saidSentenceCorrectly: true, saidByTheUserStyle: { color: 'rgb(13, 165, 68)' } });
         recognition.stop();
-        /*$scope.success = true;
-        $scope.determinateValue += 1;*/
-
-        //if ($scope.determinateValue >= 100) $scope.showSimpleToast('You did!');
       }
-      else
-        //$scope.fail = true;
-
+      else {
         recognition.stop();
+        that.setState({ saidSentenceCorrectly: false, saidByTheUserStyle: { color: '#e84118' } });
+      }
 
-      //$scope.$apply();
     }
 
     recognition.onerror = function (error) {
@@ -152,17 +151,14 @@ class App extends Component {
             </div>
 
             <div className="card-content">
-              <p>{this.state.currentPhrase}</p>
+              <p className="current-phrase">{this.state.currentPhrase}</p>
+              <p className="said-by-the-user" style={this.state.saidByTheUserStyle}>{this.state.saidByTheUser}</p>
             </div>
 
             <div className="card-botton">
               <button onClick={() => this.praticeCurrentPhase()}>Pratice</button>
               <button onClick={() => this.nextPhase()} disabled={!this.state.saidSentenceCorrectly}>Next</button>
             </div>
-
-
-
-
 
           </div>
         </div>

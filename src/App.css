@@ -1,23 +1,23 @@
+@import url('https://fonts.googleapis.com/css?family=Inconsolata');
 .App{
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background-color: #fdfdfd
+  background-color: #fdfdfd;
+  
 }
 
 .card {
   width: 25em;
   height: 15em;
-  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
   transition: 0.3s;
   padding: 1em;
-  border-radius: 3px;
-  background-color: white
+  background-color: #ddd
 }
 
 .card:hover {
-  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+  box-shadow: 0 5px 10px 0 rgba(0,0,0,0.16);
 }
 
 .card-container {
@@ -41,10 +41,20 @@
 
 .card-content{
   display: flex;
+  flex-direction: column;
   align-content: space-around;
   justify-content: center;
   align-items: center;
   flex: 1;
-  font-size: 2.6em;
   text-align: center
+}
+
+.current-phrase{
+  font-size: 1.8em;
+  color: #34495e;
+  font-family: 'Inconsolata', monospace;
+}
+.said-by-the-user{
+  font-size: 1.45em;
+  font-family: 'Inconsolata', monospace;
 }
