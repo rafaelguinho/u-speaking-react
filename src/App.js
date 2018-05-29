@@ -146,8 +146,18 @@ class App extends Component {
           <div className="card-container">
 
             <div className="card-top">
-              <button onClick={() => this.readCurrentPhase()}>Read</button>
-              <button onClick={() => this.readCurrentPhaseSlowly()}>Read slowly</button>
+
+              <div>
+                <button className="round-button btn-read-fast" onClick={() => this.readCurrentPhase()}>
+                  <img src="icons/fast.svg" />
+                </button>
+              </div>
+
+              <div className="container-btn-slow">
+                <button className="round-button btn-read-slow" onClick={() => this.readCurrentPhaseSlowly()}>
+                  <img src="icons/slow.svg" />
+                </button>
+              </div>
             </div>
 
             <div className="card-content">
@@ -156,10 +166,16 @@ class App extends Component {
             </div>
 
             <div className="card-botton">
-              <button onClick={() => this.praticeCurrentPhase()}>Pratice</button>
-              <button onClick={() => this.nextPhase()} disabled={!this.state.saidSentenceCorrectly}>Next</button>
-            </div>
+              <div>
+                <button className="round-button btn-pratice" onClick={() => this.praticeCurrentPhase()}>
+                  <img src="icons/mic.svg" width="30px" height="30px" />
+                </button>
+              </div>
 
+
+
+            </div>
+            <button onClick={() => this.nextPhase()} disabled={!this.state.saidSentenceCorrectly}>Next</button>
           </div>
         </div>
       </div>
