@@ -10,6 +10,9 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    this.handleButtonPress = this.handleButtonPress.bind(this);
+    this.handleButtonRelease = this.handleButtonRelease.bind(this);
+
     this.state = {
       allPhrases: ["What airline am I flying?",
         "Where is the restroom?",
@@ -135,6 +138,14 @@ class App extends Component {
     };
   }
 
+  handleButtonPress () {
+    this.buttonPressTimer = setTimeout(() => this.readCurrentPhaseSlowly(), 1000);
+  }
+
+  handleButtonRelease () {
+    clearTimeout(this.buttonPressTimer);
+  }
+
   render() {
     return (
       <div className="App">
@@ -145,37 +156,22 @@ class App extends Component {
         <div className="card">
           <div className="card-container">
 
-            <div className="card-top">
-
-              <div>
-                <button className="round-button btn-read-fast" onClick={() => this.readCurrentPhase()}>
-                  <img src="icons/fast.svg" />
-                </button>
-              </div>
-
-              <div className="container-btn-slow">
-                <button className="round-button btn-read-slow" onClick={() => this.readCurrentPhaseSlowly()}>
-                  <img src="icons/slow.svg" />
-                </button>
-              </div>
-            </div>
-
             <div className="card-content">
-              <p className="current-phrase">{this.state.currentPhrase}</p>
+              <p className="current-phrase" onTouchStart={this.handleButtonPress} onTouchEnd={this.handleButtonRelease} onMouseDown={this.handleButtonPress} onMouseUp={this.handleButtonRelease}>{this.state.currentPhrase}</p>
               <p className="said-by-the-user" style={this.state.saidByTheUserStyle}>{this.state.saidByTheUser}</p>
             </div>
 
             <div className="card-botton">
               <div>
                 <button className="round-button btn-pratice" onClick={() => this.praticeCurrentPhase()}>
-                  <img src="icons/mic.svg" width="30px" height="30px" />
+                  <img src="icons/mic.svg" width="50px" height="50px" />
                 </button>
               </div>
 
 
 
             </div>
-            <button onClick={() => this.nextPhase()} disabled={!this.state.saidSentenceCorrectly}>Next</button>
+            <button className="flat-button next-button" onClick={() => this.nextPhase()} disabled={!this.state.saidSentenceCorrectly}>Next</button>
           </div>
         </div>
       </div>
