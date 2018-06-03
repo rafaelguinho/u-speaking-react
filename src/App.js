@@ -34,7 +34,9 @@ class App extends Component {
       saidSentenceCorrectly: false,
       saidByTheUser: null,
       praticing: false,
-      saidByTheUserStyle: { color: 'rgb(137, 151, 156)' }
+      saidByTheUserStyle: { color: 'rgb(137, 151, 156)' },
+      cardStyles: 'card',
+      btnPraticeButton: 'round-button btn-pratice'
     };
 
     this.phraseReader = new PhraseReader(this.state.allPhrases);
@@ -77,7 +79,7 @@ class App extends Component {
 
   praticeCurrentPhase() {
     let that = this;
-    that.setState({ saidByTheUser: '', praticing: true, saidByTheUserStyle: { color: 'rgb(137, 151, 156)' } });
+    that.setState({ saidByTheUser: '', praticing: true, btnPraticeButton: 'round-button btn-pratice listening-button', saidByTheUserStyle: { color: 'rgb(137, 151, 156)' }, cardStyles:'card' });
 
     var recognition = Listener.listen();
 
@@ -122,19 +124,18 @@ class App extends Component {
       var similarity = Similarity.getSimilarity(appUnderstood, that.state.currentPhrase);
 
       if (similarity >= 0.9) {
-        that.setState({ saidSentenceCorrectly: true, saidByTheUserStyle: { color: 'rgb(13, 165, 68)' } });
+        that.setState({ saidSentenceCorrectly: true, btnPraticeButton: 'round-button btn-pratice', saidByTheUserStyle: { color: 'rgb(13, 165, 68)' }, cardStyles:'card' });
         recognition.stop();
       }
       else {
         recognition.stop();
-        that.setState({ saidSentenceCorrectly: false, saidByTheUserStyle: { color: '#e84118' } });
+        that.setState({ saidSentenceCorrectly: false, btnPraticeButton: 'round-button btn-pratice', saidByTheUserStyle: { color: '#e84118' }, cardStyles:'card card-error' });
       }
 
     }
 
     recognition.onerror = function (error) {
-      //$scope.listening = false;
-      //$scope.error = true;
+      that.setState({btnPraticeButton: 'round-button btn-pratice'});
     };
   }
 
@@ -153,17 +154,17 @@ class App extends Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to React</h1>
         </header> */}
-        <div className="card">
+        <div className={this.state.cardStyles}>
           <div className="card-container">
 
             <div className="card-content">
-              <p className="current-phrase" onTouchStart={this.handleButtonPress} onTouchEnd={this.handleButtonRelease} onMouseDown={this.handleButtonPress} onMouseUp={this.handleButtonRelease}>{this.state.currentPhrase}</p>
+              <p className="current-phrase" onClick={() => this.readCurrentPhaseSlowly()}>{this.state.currentPhrase}</p>
               <p className="said-by-the-user" style={this.state.saidByTheUserStyle}>{this.state.saidByTheUser}</p>
             </div>
 
             <div className="card-botton">
               <div>
-                <button className="round-button btn-pratice" onClick={() => this.praticeCurrentPhase()}>
+                <button className={this.state.btnPraticeButton} onClick={() => this.praticeCurrentPhase()} disabled={this.state.saidSentenceCorrectly}>
                   <img src="icons/mic.svg" width="50px" height="50px" />
                 </button>
               </div>
