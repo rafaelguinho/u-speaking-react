@@ -1,5 +1,59 @@
 @import url('https://fonts.googleapis.com/css?family=Inconsolata');
 
+
+/* Moving on to the styling, we'll start with the main progress bar first and then the value part of it. After that, we'll do some experiments :D */
+body {
+	background: #fdfdfd;
+}
+
+.container{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 0 2em;
+  height: inherit;
+  justify-content: space-around;
+}
+
+progress {
+	width: 100%;
+	height: 17px;
+	margin: 20px auto;
+	display: block;
+	/* Important Thing */
+	-webkit-appearance: none;
+	border: none;
+}
+
+/* All good till now. Now we'll style the background */
+progress::-webkit-progress-bar {
+	background: #ecf0f1;
+	border-radius: 50px;
+	padding: 2px;
+	box-shadow: 0 1px 0px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Now the value part */
+progress::-webkit-progress-value {
+	border-radius: 50px;
+	box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.4);
+	background-color:#45aaf2;
+		
+	/* Looks great, now animating it */
+	background-size: 25px 14px, 100% 100%, 100% 100%;
+	-webkit-animation: move 5s linear 0 infinite;
+}
+
+/* That's it! Now let's try creating a new stripe pattern and animate it using animation and keyframes properties  */
+
+@-webkit-keyframes move {
+	0% {background-position: 0px 0px, 0 0, 0 0}
+	100% {background-position: -100px 0px, 0 0, 0 0}
+}
+
+/* Prefix-free was creating issues with the animation */
+
+
 @keyframes shake {
   10%, 90% {
     transform: translate3d(-1px, 0, 0);
@@ -20,6 +74,32 @@
 
 @keyframes pulse {to {box-shadow: 0 0 0 45px rgba(60, 135, 233, 0.08);}}
 
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+
 .card-error {
   animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
   transform: translate3d(0, 0, 0);
@@ -28,9 +108,6 @@
 }
 
 .App{
-  display: flex;
-  align-items: center;
-  justify-content: center;
   height: 100vh;
   background-color: #fdfdfd;
   
@@ -41,6 +118,7 @@
   height: 28em;
   transition: 0.3s;
   padding: 0.6em;
+  margin-bottom: 1em;
   background-color: #ddd
 }
 
@@ -74,7 +152,11 @@
   flex: 1;
   text-align: center
 }
-
+.instructions{
+  font-family: 'Inconsolata', monospace;
+  font-size: 1.3em;
+  color: #3d3d3d
+}
 .current-phrase{
   font-size: 1.8em;
   color: #34495e;
@@ -125,6 +207,10 @@
   outline: none;
 
 }
+
+
+
+
 
 .btn-pratice{
   background-color: #3498db;

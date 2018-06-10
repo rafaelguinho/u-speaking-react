@@ -4,6 +4,7 @@ import PhraseReader from './PhraseReader';
 import Similarity from './Similarity';
 import Listener from './Listener';
 import './App.css';
+import db from './db';
 
 class App extends Component {
 
@@ -48,6 +49,42 @@ class App extends Component {
   }
 
   componentDidMount() {
+
+    //   db.on("populate", function () {
+    //     db.phrases.add({ content: "What airline am I flying?", lastPratice: null, quantityOfPratices: 0 });
+    //     db.phrases.add({ content: "Where is the restroom?", lastPratice: null, quantityOfPratices: 0 });
+    //     db.phrases.add({ content: "How much does the magazine cost?", lastPratice: null, quantityOfPratices: 0 });
+    //     db.phrases.add({ content: "May I purchase headphones?", lastPratice: null, quantityOfPratices: 0 });
+    //     db.phrases.add({ content: "How do I access the Internet?", lastPratice: null, quantityOfPratices: 0 });
+    //     db.phrases.add({ content: "Where can I find a restaurant?", lastPratice: null, quantityOfPratices: 0 });
+    //     db.phrases.add({ content: "I have lost my passport.", lastPratice: null, quantityOfPratices: 0 });
+    //     db.phrases.add({ content: "Someone stole my money.", lastPratice: null, quantityOfPratices: 0 });
+    //     db.phrases.add({ content: "Where is the hospital?", lastPratice: null, quantityOfPratices: 0 });
+    //     db.phrases.add({ content: "Where can I find a grocery store?", lastPratice: null, quantityOfPratices: 0 });
+    //     db.phrases.add({ content: "My room is messy, and I would like it cleaned.", lastPratice: null, quantityOfPratices: 0 });
+    //     db.phrases.add({ content: "I would like two double beds, please.", lastPratice: null, quantityOfPratices: 0 });
+    //     db.phrases.add({ content: "How many beds are in the room?", lastPratice: null, quantityOfPratices: 0 });
+    //     db.phrases.add({ content: "Do you know where this hotel is?", lastPratice: null, quantityOfPratices: 0 });
+    //     db.phrases.add({ content: "Didn't even last a minute", lastPratice: null, quantityOfPratices: 0 });
+    // });
+
+    // db.table('phrases')
+    //   .toArray()
+    //   .then((phrases) => {
+    //     //this.setState({ allPhrases });
+    //   });
+
+    // let todo = {
+    //   title: 'ok',
+    //   done: false,
+    // };
+    // db.table('todos')
+    //   .add(todo)
+    //   .then((id) => {
+    //     const newList = [...this.state.todos, Object.assign({}, todo, { id })];
+    //     console.log(newList);
+    //   });
+
     this.readCurrentPhase();
   }
 
@@ -79,7 +116,7 @@ class App extends Component {
 
   praticeCurrentPhase() {
     let that = this;
-    that.setState({ saidByTheUser: '', praticing: true, btnPraticeButton: 'round-button btn-pratice listening-button', saidByTheUserStyle: { color: 'rgb(137, 151, 156)' }, cardStyles:'card' });
+    that.setState({ saidByTheUser: '', praticing: true, btnPraticeButton: 'round-button btn-pratice listening-button', saidByTheUserStyle: { color: 'rgb(137, 151, 156)' }, cardStyles: 'card' });
 
     var recognition = Listener.listen();
 
@@ -124,57 +161,64 @@ class App extends Component {
       var similarity = Similarity.getSimilarity(appUnderstood, that.state.currentPhrase);
 
       if (similarity >= 0.9) {
-        that.setState({ saidSentenceCorrectly: true, btnPraticeButton: 'round-button btn-pratice', saidByTheUserStyle: { color: 'rgb(13, 165, 68)' }, cardStyles:'card' });
+        that.setState({ saidSentenceCorrectly: true, btnPraticeButton: 'round-button btn-pratice', saidByTheUserStyle: { color: 'rgb(13, 165, 68)' }, cardStyles: 'card' });
         recognition.stop();
       }
       else {
         recognition.stop();
-        that.setState({ saidSentenceCorrectly: false, btnPraticeButton: 'round-button btn-pratice', saidByTheUserStyle: { color: '#e84118' }, cardStyles:'card card-error' });
+        that.setState({ saidSentenceCorrectly: false, btnPraticeButton: 'round-button btn-pratice', saidByTheUserStyle: { color: '#e84118' }, cardStyles: 'card card-error' });
       }
 
     }
 
     recognition.onerror = function (error) {
-      that.setState({btnPraticeButton: 'round-button btn-pratice'});
+      that.setState({ btnPraticeButton: 'round-button btn-pratice' });
     };
   }
 
-  handleButtonPress () {
+  handleButtonPress() {
     this.buttonPressTimer = setTimeout(() => this.readCurrentPhaseSlowly(), 1000);
   }
 
-  handleButtonRelease () {
+  handleButtonRelease() {
     clearTimeout(this.buttonPressTimer);
   }
 
   render() {
     return (
       <div className="App">
-        {/* <header className="App-header">
+         {/* <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to React</h1>
         </header> */}
-        <div className={this.state.cardStyles}>
-          <div className="card-container">
+        <div className="container">
+          <progress value="50" max="100"></progress>
 
-            <div className="card-content">
-              <p className="current-phrase" onClick={() => this.readCurrentPhaseSlowly()}>{this.state.currentPhrase}</p>
-              <p className="said-by-the-user" style={this.state.saidByTheUserStyle}>{this.state.saidByTheUser}</p>
-            </div>
+        <p className="instructions"><strong>Speak</strong> this sentence</p>
 
-            <div className="card-botton">
-              <div>
-                <button className={this.state.btnPraticeButton} onClick={() => this.praticeCurrentPhase()} disabled={this.state.saidSentenceCorrectly}>
-                  <img src="icons/mic.svg" width="50px" height="50px" />
-                </button>
+          <div className={this.state.cardStyles}>
+            <div className="card-container">
+
+              <div className="card-content">
+                <p className="current-phrase" onClick={() => this.readCurrentPhaseSlowly()}>{this.state.currentPhrase}</p>
+                <p className="said-by-the-user" style={this.state.saidByTheUserStyle}>{this.state.saidByTheUser}</p>
               </div>
 
+              <div className="card-botton">
+                <div>
+                  <button className={this.state.btnPraticeButton} onClick={() => this.praticeCurrentPhase()} disabled={this.state.saidSentenceCorrectly}>
+                    <img src="icons/mic.svg" width="50px" height="50px" />
+                  </button>
+                </div>
 
 
+
+              </div>
+              <button className="flat-button next-button" onClick={() => this.nextPhase()} disabled={!this.state.saidSentenceCorrectly}>Next</button>
             </div>
-            <button className="flat-button next-button" onClick={() => this.nextPhase()} disabled={!this.state.saidSentenceCorrectly}>Next</button>
           </div>
         </div>
+
       </div>
     );
   }
