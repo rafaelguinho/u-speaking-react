@@ -50,6 +50,12 @@ class App extends Component {
 
   componentDidMount() {
 
+    db.table('phrases')
+      .toArray()
+      .then((phrases) => {
+        console.log(phrases)
+      });
+
     //   db.on("populate", function () {
     //     db.phrases.add({ content: "What airline am I flying?", lastPratice: null, quantityOfPratices: 0 });
     //     db.phrases.add({ content: "Where is the restroom?", lastPratice: null, quantityOfPratices: 0 });
