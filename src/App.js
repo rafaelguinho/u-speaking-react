@@ -15,22 +15,8 @@ class App extends Component {
     this.handleButtonRelease = this.handleButtonRelease.bind(this);
 
     this.state = {
-      allPhrases: ["What airline am I flying?",
-        "Where is the restroom?",
-        "How much does the magazine cost?",
-        "May I purchase headphones?",
-        "How do I access the Internet?",
-        "Where can I find a restaurant?",
-        "I have lost my passport.",
-        "Someone stole my money.",
-        "Where is the hospital?",
-        "Where can I find a grocery store?",
-        "My room is messy, and I would like it cleaned.",
-        "I would like two double beds, please.",
-        "How many beds are in the room?",
-        "Do you know where this hotel is?",
-        "Didn't even last a minute"
-      ],
+      todos: [],
+      allPhrases: [],
       currentPhrase: null,
       saidSentenceCorrectly: false,
       saidByTheUser: null,
@@ -44,70 +30,35 @@ class App extends Component {
 
   }
 
-  componentWillMount() {
-    this.setState({ currentPhrase: this.selectRandonPhrase() });
-  }
-
   componentDidMount() {
-
     db.table('phrases')
       .toArray()
-      .then((phrases) => {
-        console.log(phrases)
+      .then((allPhrases) => {
+        var randonPhrase = this.selectRandonPhrase(allPhrases);
+        this.setState({ allPhrases });
+        this.setState({ currentPhrase:  randonPhrase});
       });
-
-    //   db.on("populate", function () {
-    //     db.phrases.add({ content: "What airline am I flying?", lastPratice: null, quantityOfPratices: 0 });
-    //     db.phrases.add({ content: "Where is the restroom?", lastPratice: null, quantityOfPratices: 0 });
-    //     db.phrases.add({ content: "How much does the magazine cost?", lastPratice: null, quantityOfPratices: 0 });
-    //     db.phrases.add({ content: "May I purchase headphones?", lastPratice: null, quantityOfPratices: 0 });
-    //     db.phrases.add({ content: "How do I access the Internet?", lastPratice: null, quantityOfPratices: 0 });
-    //     db.phrases.add({ content: "Where can I find a restaurant?", lastPratice: null, quantityOfPratices: 0 });
-    //     db.phrases.add({ content: "I have lost my passport.", lastPratice: null, quantityOfPratices: 0 });
-    //     db.phrases.add({ content: "Someone stole my money.", lastPratice: null, quantityOfPratices: 0 });
-    //     db.phrases.add({ content: "Where is the hospital?", lastPratice: null, quantityOfPratices: 0 });
-    //     db.phrases.add({ content: "Where can I find a grocery store?", lastPratice: null, quantityOfPratices: 0 });
-    //     db.phrases.add({ content: "My room is messy, and I would like it cleaned.", lastPratice: null, quantityOfPratices: 0 });
-    //     db.phrases.add({ content: "I would like two double beds, please.", lastPratice: null, quantityOfPratices: 0 });
-    //     db.phrases.add({ content: "How many beds are in the room?", lastPratice: null, quantityOfPratices: 0 });
-    //     db.phrases.add({ content: "Do you know where this hotel is?", lastPratice: null, quantityOfPratices: 0 });
-    //     db.phrases.add({ content: "Didn't even last a minute", lastPratice: null, quantityOfPratices: 0 });
-    // });
-
-    // db.table('phrases')
-    //   .toArray()
-    //   .then((phrases) => {
-    //     //this.setState({ allPhrases });
-    //   });
-
-    // let todo = {
-    //   title: 'ok',
-    //   done: false,
-    // };
-    // db.table('todos')
-    //   .add(todo)
-    //   .then((id) => {
-    //     const newList = [...this.state.todos, Object.assign({}, todo, { id })];
-    //     console.log(newList);
-    //   });
-
-    this.readCurrentPhase();
   }
 
   componentDidUpdate() {
 
     if (this.state.praticing) return;
 
-    this.readCurrentPhase();
+    if (!this.state.currentPhrase) {
+      //this.setState({ currentPhrase: this.selectRandonPhrase(this.state.allPhrases) });
+      return;
+    }
+
+    // this.readCurrentPhase();
   }
 
-  selectRandonPhrase() {
-    var phraseIndex = Math.floor((Math.random() * this.state.allPhrases.length) + 0);
-    return this.state.allPhrases[phraseIndex];
+  selectRandonPhrase(allPhrases) {
+    var phraseIndex = Math.floor((Math.random() * allPhrases.length) + 0);
+    return allPhrases[phraseIndex];
   }
 
   nextPhase() {
-    this.setState({ currentPhrase: this.selectRandonPhrase(), saidByTheUser: '', saidSentenceCorrectly: false, praticing: false, saidByTheUserStyle: { color: 'rgb(137, 151, 156)' } });
+    this.setState({ currentPhrase: this.selectRandonPhrase(this.state.allPhrases), saidByTheUser: '', saidSentenceCorrectly: false, praticing: false, saidByTheUserStyle: { color: 'rgb(137, 151, 156)' } });
   }
 
   readCurrentPhaseSlowly() {
@@ -193,14 +144,14 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-         {/* <header className="App-header">
+        {/* <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to React</h1>
         </header> */}
         <div className="container">
           <progress value="50" max="100"></progress>
 
-        <p className="instructions"><strong>Speak</strong> this sentence</p>
+          <p className="instructions"><strong>Speak</strong> this sentence</p>
 
           <div className={this.state.cardStyles}>
             <div className="card-container">
