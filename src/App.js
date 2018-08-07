@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import PhraseReader from './PhraseReader';
 import Similarity from './Similarity';
 import Listener from './Listener';
@@ -30,26 +29,19 @@ class App extends Component {
 
   }
 
-  componentDidMount() {
+  componentWillMount() {
     db.table('phrases')
       .toArray()
       .then((allPhrases) => {
         var randonPhrase = this.selectRandonPhrase(allPhrases);
-        this.setState({ allPhrases });
-        this.setState({ currentPhrase:  randonPhrase});
+        this.setState({ allPhrases, currentPhrase: randonPhrase.content });
       });
   }
 
   componentDidUpdate() {
-
     if (this.state.praticing) return;
 
-    if (!this.state.currentPhrase) {
-      //this.setState({ currentPhrase: this.selectRandonPhrase(this.state.allPhrases) });
-      return;
-    }
-
-    // this.readCurrentPhase();
+    this.readCurrentPhase();
   }
 
   selectRandonPhrase(allPhrases) {
@@ -149,7 +141,7 @@ class App extends Component {
           <h1 className="App-title">Welcome to React</h1>
         </header> */}
         <div className="container">
-          <progress value="50" max="100"></progress>
+          <progress value="0" max="100"></progress>
 
           <p className="instructions"><strong>Speak</strong> this sentence</p>
 
