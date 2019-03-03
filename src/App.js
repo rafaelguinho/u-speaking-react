@@ -34,7 +34,7 @@ class App extends Component {
       .toArray()
       .then((allPhrases) => {
         var randonPhrase = this.selectRandonPhrase(allPhrases);
-        this.setState({ allPhrases, currentPhrase: randonPhrase.content });
+        this.setState({ allPhrases, currentPhrase: randonPhrase });
       });
   }
 
@@ -50,17 +50,21 @@ class App extends Component {
   }
 
   nextPhase() {
-    this.setState({ currentPhrase: this.selectRandonPhrase(this.state.allPhrases), saidByTheUser: '', saidSentenceCorrectly: false, praticing: false, saidByTheUserStyle: { color: 'rgb(137, 151, 156)' } });
+    this.setState({
+      currentPhrase: this.selectRandonPhrase(this.state.allPhrases),
+      saidByTheUser: '', saidSentenceCorrectly: false, praticing: false,
+      saidByTheUserStyle: { color: 'rgb(137, 151, 156)' }
+    });
   }
 
   readCurrentPhaseSlowly() {
     this.phraseReader.decreaseSpeechVelocity();
-    this.phraseReader.readPhrase(this.state.currentPhrase);
+    this.phraseReader.readPhrase(this.state.currentPhrase.content);
   }
 
   readCurrentPhase() {
     this.phraseReader.normalSpeechVelocity();
-    this.phraseReader.readPhrase(this.state.currentPhrase);
+    this.phraseReader.readPhrase(this.state.currentPhrase.content);
   }
 
   praticeCurrentPhase() {
@@ -85,6 +89,8 @@ class App extends Component {
 
     recognition.onresult = function (event) {
 
+      console.log(event.results);
+
 
       var isFinalResult = event.results[0].isFinal;
 
@@ -107,15 +113,15 @@ class App extends Component {
       interimResult = '';
 
 
-      var similarity = Similarity.getSimilarity(appUnderstood, that.state.currentPhrase);
+      var similarity = Similarity.getSimilarity(appUnderstood, that.state.currentPhrase.content);
 
       if (similarity >= 0.9) {
-        that.setState({ saidSentenceCorrectly: true, btnPraticeButton: 'round-button btn-pratice', saidByTheUserStyle: { color: 'rgb(13, 165, 68)' }, cardStyles: 'card' });
+        that.setState({ saidByTheUser: appUnderstood, saidSentenceCorrectly: true, btnPraticeButton: 'round-button btn-pratice', saidByTheUserStyle: { color: 'rgb(13, 165, 68)' }, cardStyles: 'card' });
         recognition.stop();
       }
       else {
         recognition.stop();
-        that.setState({ saidSentenceCorrectly: false, btnPraticeButton: 'round-button btn-pratice', saidByTheUserStyle: { color: '#e84118' }, cardStyles: 'card card-error' });
+        that.setState({ saidByTheUser: appUnderstood, saidSentenceCorrectly: false, btnPraticeButton: 'round-button btn-pratice', saidByTheUserStyle: { color: '#e84118' }, cardStyles: 'card card-error' });
       }
 
     }
@@ -135,21 +141,18 @@ class App extends Component {
 
   render() {
     return (
-      <div className="App">
-        {/* <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header> */}
-        <div className="container">
-          <progress value="0" max="100"></progress>
 
-          <p className="instructions"><strong>Speak</strong> this sentence</p>
+      this.state.currentPhrase ? (<div className="App">
+
+        <div className="container">
+
+          <p className="instructions"><strong>Speak</strong> the sentence below</p>
 
           <div className={this.state.cardStyles}>
             <div className="card-container">
 
               <div className="card-content">
-                <p className="current-phrase" onClick={() => this.readCurrentPhaseSlowly()}>{this.state.currentPhrase}</p>
+                <p className="current-phrase" onClick={() => this.readCurrentPhaseSlowly()}>{this.state.currentPhrase.content}</p>
                 <p className="said-by-the-user" style={this.state.saidByTheUserStyle}>{this.state.saidByTheUser}</p>
               </div>
 
@@ -166,9 +169,14 @@ class App extends Component {
               <button className="flat-button next-button" onClick={() => this.nextPhase()} disabled={!this.state.saidSentenceCorrectly}>Next</button>
             </div>
           </div>
+
+          <a href="#" >Manage phrases</a>
         </div>
 
       </div>
+      ) : (<div></div>)
+
+
     );
   }
 }

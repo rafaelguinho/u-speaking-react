@@ -1,8 +1,5 @@
 import Dexie from 'dexie';
 
-// const db = new Dexie('u_speaking_db');
-// db.version(1).stores({ phrases: '++id,content,lastPratice,quantityOfPratices' });
-
 const db = new Dexie('phrasesDB');
 db.version(1).stores({ phrases: '++id, content, lastPratice, quantityOfPratices' });
 
