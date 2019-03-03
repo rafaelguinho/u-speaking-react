@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PhraseReader from './PhraseReader';
 import Similarity from './Similarity';
 import Listener from './Listener';
+import { Route, Link, BrowserRouter as Router } from 'react-router-dom';
 import './App.css';
 import db from './db';
 
@@ -170,7 +171,7 @@ class App extends Component {
             </div>
           </div>
 
-          <a href="#" >Manage phrases</a>
+          <Link to="/myphrases">Manage phrases</Link>
         </div>
 
       </div>
