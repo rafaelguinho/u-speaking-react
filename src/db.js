@@ -3,9 +3,9 @@ import Dexie from 'dexie';
 if (navigator.storage && navigator.storage.persist)
   navigator.storage.persist().then(granted => {
     if (granted)
-      alert("Storage will not be cleared except by explicit user action");
+      console.log("Storage will not be cleared except by explicit user action");
     else
-      alert("Storage may be cleared by the UA under storage pressure.");
+    console.log("Storage may be cleared by the UA under storage pressure.");
   });
 
 const db = new Dexie('phrasesDB');
