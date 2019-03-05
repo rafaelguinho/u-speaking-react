@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import PhraseReader from './PhraseReader';
 import Similarity from './Similarity';
-import Listener from './Listener';
 import { Route, Link, BrowserRouter as Router } from 'react-router-dom';
 import './App.css';
 import db from './db';
+import Header from './Header';
+import mic from './icons/mic.svg';
 
 class App extends Component {
 
@@ -36,6 +37,7 @@ class App extends Component {
       .then((allPhrases) => {
         var randonPhrase = this.selectRandonPhrase(allPhrases);
         this.setState({ allPhrases, currentPhrase: randonPhrase });
+
       });
   }
 
@@ -70,49 +72,22 @@ class App extends Component {
 
   praticeCurrentPhase() {
     let that = this;
-    that.setState({ saidByTheUser: '', praticing: true, btnPraticeButton: 'round-button btn-pratice listening-button', saidByTheUserStyle: { color: 'rgb(137, 151, 156)' }, cardStyles: 'card' });
 
-    var recognition = Listener.listen();
+    var recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition)();
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 5;
 
     recognition.start();
 
-
-    recognition.onstart = function () {
+    recognition.onaudiostart = function () {
       console.log('Listening...');
+      that.setState({ saidByTheUser: '', praticing: true, btnPraticeButton: 'round-button btn-pratice listening-button', saidByTheUserStyle: { color: 'rgb(137, 151, 156)' }, cardStyles: 'card' });
     };
-
-    var two_line = /\n\n/g;
-    var one_line = /\n/g;
-    function linebreak(s) {
-      return s.replace(two_line, '<p></p>').replace(one_line, '<br>');
-    }
-
 
     recognition.onresult = function (event) {
 
-      console.log(event.results);
-
-
-      var isFinalResult = event.results[0].isFinal;
-
-      let interimResult = '';
-      let appUnderstood = '';
-
-      if (!isFinalResult) {
-
-        for (var i = event.resultIndex; i < event.results.length; ++i) {
-          interimResult += event.results[i][0].transcript;
-        }
-
-        that.setState({ saidByTheUser: interimResult });
-
-        return;
-      }
-
-
-      appUnderstood = event.results[0][0].transcript;
-      interimResult = '';
-
+      let appUnderstood = event.results[0][0].transcript;
 
       var similarity = Similarity.getSimilarity(appUnderstood, that.state.currentPhrase.content);
 
@@ -145,6 +120,8 @@ class App extends Component {
 
       this.state.currentPhrase ? (<div className="App">
 
+      <Header></Header>
+
         <div className="container">
 
           <p className="instructions"><strong>Speak</strong> the sentence below</p>
@@ -160,7 +137,7 @@ class App extends Component {
               <div className="card-botton">
                 <div>
                   <button className={this.state.btnPraticeButton} onClick={() => this.praticeCurrentPhase()} disabled={this.state.saidSentenceCorrectly}>
-                    <img src="icons/mic.svg" width="50px" height="50px" />
+                    <img src={mic} width="50px" height="50px" />
                   </button>
                 </div>
 

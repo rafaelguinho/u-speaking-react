@@ -1,0 +1,99 @@
+header {
+    height: 40px;
+    display: flex;
+  }
+  
+  .header-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  header {
+    background-color: #e74c3c;
+     box-shadow: 0 3px 5px -1px #ddd;
+    padding: 7px 7px;
+  }
+  
+  .logo{
+      display: flex;
+      align-items: center
+  }
+  .logo-about {
+    font-size: 20px;
+    color: white;
+  }
+  
+  
+  
+  .header-nav {
+    display: flex;
+  }
+  
+  .header-nav-item {
+    font-size: 16px;
+    font-weight: 300;
+    padding: 8px;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .header-nav-item a {
+    color: #000;
+    text-decoration: none;
+  }
+  
+  .header-nav-item span {
+    height: 2px;
+    background-color: #0474bc;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    transition: 0.3s ease;
+  }
+  
+  .header-nav-item:hover span {
+    width: 100%;
+  }
+  
+  .header-nav-item + .header-nav-item {
+    margin-left: 25px;
+  }
+  .mobile-menu {
+    list-style-type: none;
+  }
+  
+  .fa-bars {
+    margin-right: 20px;
+    padding-left: 40px;
+  }
+  
+  @media screen and (min-width: 1140px) {
+    .header-container,
+    .hero-container,
+    .main-container,
+    .footer-container {
+      width: 1140px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+  
+  /* Mobile to Tablet  */
+  @media (min-width: 320px) and (max-width: 767px) {
+    .header-nav-item, .mobile-menu {
+      display:none;
+    } 
+    
+  }
+  
+  /* Tablet to Desktop */
+  @media (min-width: 768px) {
+    
+    .mobile-menu, .fa-bars {
+      display: none;
+    }
+    
+  }

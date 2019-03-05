@@ -11,7 +11,6 @@ body {
   align-items: center;
   flex-direction: column;
   padding: 0 2em;
-  height: inherit;
   justify-content: start;
 }
 
@@ -118,6 +117,7 @@ progress::-webkit-progress-value {
   height: 28em;
   transition: 0.3s;
   padding: 0.6em;
+  display: flex;
   margin-bottom: 1em;
   background-color: #ddd
 }
@@ -125,19 +125,38 @@ progress::-webkit-progress-value {
 @media only screen and (max-width : 414px) {
     .card {
       width: 85vw;
-      height: 72vh;
+      height: 66vh;
+    }
+
+    a {
+      padding: 10px
     }
   }
 
-.card:hover {
-  box-shadow: 0 3px 6px rgba(0,0,0,0.09);
-}
+  @media only screen and (max-width : 320px) {
+    .card {
+      width: 85vw;
+      height: 64vh;
+    }
+
+    a {
+      padding: 5px
+    }
+  }
+
+  @media only screen and (min-width : 415px) {
+    a {
+      padding: 22px 22px
+    }
+    .container{
+      height: inherit;
+    }
+  }
 
 .card-container {
   padding: 2px 12px;
   display: flex;
   flex-direction: column;
-  height: inherit;
   
 }
 .card-top{
@@ -274,7 +293,7 @@ a {
   font-family: helvetica;
   text-decoration: none;
   text-transform: uppercase;
-  padding: 22px 22px
+  
 }
 
 a:hover {
