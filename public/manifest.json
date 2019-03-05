@@ -3,7 +3,7 @@
   "short_name": "USpeaking",
   "theme_color": "#f44336",
   "background_color": "#f5f6fa",
-  "display": "fullscreen",
+  "display": "Standalone",
   "orientation": "portrait",
   "Scope": "/",
   "start_url": "/",
