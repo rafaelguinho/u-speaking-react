@@ -128,7 +128,7 @@ progress::-webkit-progress-value {
       height: 66vh;
     }
 
-    a {
+    a.link {
       padding: 10px
     }
   }
@@ -139,13 +139,13 @@ progress::-webkit-progress-value {
       height: 64vh;
     }
 
-    a {
+    a.link {
       padding: 5px
     }
   }
 
   @media only screen and (min-width : 415px) {
-    a {
+    a.link {
       padding: 22px 22px
     }
     .container{
@@ -226,7 +226,6 @@ progress::-webkit-progress-value {
 }
 
 .flat-button{
-  box-shadow: 0 3px 7px 0 rgba(0,0,0,0.15);
   border: none;
   
   text-align: center;
@@ -288,7 +287,7 @@ progress::-webkit-progress-value {
   transition: background-color 0.3s
 }
 
-a {
+a.link {
   color: #30336b;
   font-family: helvetica;
   text-decoration: none;
@@ -324,3 +323,4 @@ a:visited {
   box-shadow: 0 3px 7px 0 rgba(0,0,0,0.15);
   transition: background-color .5s, color .5s, box-shadow .5s;
 }
+

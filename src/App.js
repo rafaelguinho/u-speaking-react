@@ -120,7 +120,7 @@ class App extends Component {
 
       this.state.currentPhrase ? (<div className="App">
 
-      <Header></Header>
+        <Header title="USpeaking"></Header>
 
         <div className="container">
 
@@ -148,10 +148,10 @@ class App extends Component {
             </div>
           </div>
 
-          <Link to="/myphrases">Manage phrases</Link>
+          <Link to={{ pathname: '/myphrases' }} className="link" >Manage phrases</Link>
         </div>
 
-      </div>
+      </div >
       ) : (<div></div>)
 
 
