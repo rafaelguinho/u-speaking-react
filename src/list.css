@@ -1,7 +1,8 @@
 ol {
     list-style: none;
     counter-reset: my-awesome-counter;
-    padding: 0
+    padding: 0;
+    width: 100%;
   }
   li {
     border: 1px solid #ddd;
